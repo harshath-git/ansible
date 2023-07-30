@@ -1,0 +1,29 @@
+---
+- name: my test playbook
+  hosts: all
+  become: true
+  tasks:
+    - name: install httpd
+      yum:
+        name: httpd
+        state: installed
+      when: ansible_os_family == "RedHat"
+
+    - name: start httpd service
+      service:
+        name: httpd
+        state: started
+      when: ansible_os_family == "RedHat"
+
+    - name: install apache2
+      apt:
+        name: httpd
+        state: present
+      when: ansible_os_family == "Dibian"
+
+    - name: start httpd service
+      service:
+        name: httpd
+        state: started
+      when: ansible_os_family == "Dibian"
+ 

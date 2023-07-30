@@ -1,0 +1,9 @@
+---
+- name: creating users
+
+  hosts: webservers[0]
+  become: yes
+
+  tasks:
+    - name: create a user pamma
+      user: name=pamma

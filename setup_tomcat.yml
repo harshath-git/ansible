@@ -1,0 +1,39 @@
+---
+- name: setup tomcat
+  hosts: all
+  become: true
+  tasks:
+    - name: install java in redhat family
+      yum: 
+        name: java
+        state: installed
+      when: ansible_os_family == "RedHat"
+
+    - name: install default-jdk in dibian family
+      apt:
+        name: default-jdk
+        state: present
+      when: ansible_os_family == "Dibian"
+
+    - name: download tomcat
+      get_url:
+        url: https://dlcdn.apache.org/tomcat/tomcat-8/v8.5.91/bin/apache-tomcat-8.5.91.tar.gz
+        dest: /opt/
+
+    - name: extract package
+      unarchive: 
+        src: /opt/apache-tomcat-8.5.91.tar.gz
+        dest: /opt/
+        remote_src: yes
+
+    - name: give excecute permission
+      file:
+        path: /opt/apache-tomcat-8.5.91/bin/startup.sh
+        mode: '0777'
+
+    - name: starting tomcat
+      shell: nohup ./startup.sh 
+      args: 
+        chdir: /opt/apache-tomcat-8.5.91/bin
+      
+
